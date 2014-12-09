@@ -1,10 +1,10 @@
-;;; elscreen-persist.el --- persist the elscreen across sessions -*- lexical-binding: t; -*-
+;;; elscreen-persist.el --- persist the elscreen across sessions
 ;; Copyright (C) 2014  Hironori Yoshida
 
 ;; Author: Hironori Yoshida <webmaster@robario.com>
 ;; Keywords: elscreen frames
-;; Version: 0.1.0
-;; Package-Requires: ((elscreen "20140421") (revive "20121022"))
+;; Version: 0.1.1
+;; Package-Requires: ((elscreen "1.4.6") (revive "2.1.9"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
