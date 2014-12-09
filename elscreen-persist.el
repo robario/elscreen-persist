@@ -4,7 +4,7 @@
 ;; Author: Hironori Yoshida <webmaster@robario.com>
 ;; Keywords: elscreen frames
 ;; Version: 0.1.1
-;; Package-Requires: ((elscreen "1.4.6") (revive "2.1.9"))
+;; Package-Requires: ((elscreen "1.4.6") (revive "2.19"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
