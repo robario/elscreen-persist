@@ -1,5 +1,5 @@
 ;;; elscreen-persist.el --- persist the elscreen across sessions
-;; Copyright (C) 2014  Hironori Yoshida
+;; Copyright (C) 2014 Hironori Yoshida
 
 ;; Author: Hironori Yoshida <webmaster@robario.com>
 ;; Keywords: elscreen frames
@@ -60,10 +60,10 @@
     (dolist (screen (sort (elscreen-get-screen-list) '<))
       (elscreen-goto screen)
       (let ((screen-to-window-configuration (list (cons screen (current-window-configuration-printable)))))
-	(setq screen-to-window-configuration-alist
-	      (if (eq screen current-screen)
-		  (append screen-to-window-configuration-alist screen-to-window-configuration)
-		(append screen-to-window-configuration screen-to-window-configuration-alist)))))
+        (setq screen-to-window-configuration-alist
+              (if (eq screen current-screen)
+                  (append screen-to-window-configuration-alist screen-to-window-configuration)
+                (append screen-to-window-configuration screen-to-window-configuration-alist)))))
 
     ;; Store the configurations.
     (with-temp-file elscreen-persist-file
