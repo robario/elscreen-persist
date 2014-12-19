@@ -68,8 +68,10 @@
 
     ;; Store the configurations.
     (with-temp-file elscreen-persist-file
-      (insert (prin1-to-string (list (cons 'frame-parameters frame-parameters)
-                                     (cons 'screen-to-window-configuration-alist screen-to-window-configuration-alist)))))))
+      (let ((print-length nil)
+            (print-level nil))
+        (insert (prin1-to-string `((frame-parameters . ,frame-parameters)
+                                   (screen-to-window-configuration-alist . ,screen-to-window-configuration-alist))))))))
 
 ;;;###autoload
 (defun elscreen-persist-restore ()
