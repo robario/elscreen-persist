@@ -82,7 +82,10 @@
            (frame-parameters (assoc-default 'frame-parameters config))
            (screen-to-window-configuration-alist (assoc-default 'screen-to-window-configuration-alist config)))
       ;; Restore the frame parameters.
-      (modify-frame-parameters nil frame-parameters)
+      (unless (and (boundp 'desktop-restore-frames) desktop-restore-frames
+                   (fboundp 'desktop-full-lock-name) (file-exists-p (desktop-full-lock-name)))
+        (modify-frame-parameters nil frame-parameters)
+        (message "The frame was restored by `elscreen-persist'. Using `desktop' is recommended."))
 
       ;; Restore all the screen and window configurations.
       (dolist (screen-to-window-configuration screen-to-window-configuration-alist)
@@ -106,10 +109,10 @@ the mode if ARG is omitted or nil."
   :global t
   (if elscreen-persist-mode
       (progn
-        (add-hook 'kill-emacs-hook 'elscreen-persist-store)
-        (add-hook 'after-init-hook 'elscreen-persist-restore))
-    (remove-hook 'kill-emacs-hook 'elscreen-persist-store)
-    (remove-hook 'after-init-hook 'elscreen-persist-restore)))
+        (add-hook 'kill-emacs-hook #'elscreen-persist-store t)
+        (add-hook 'window-setup-hook #'elscreen-persist-restore t))
+    (remove-hook 'kill-emacs-hook #'elscreen-persist-store)
+    (remove-hook 'window-setup-hook #'elscreen-persist-restore)))
 
 (provide 'elscreen-persist)
 ;;; elscreen-persist.el ends here
