@@ -3,7 +3,7 @@
 
 ;; Author: Hironori Yoshida <webmaster@robario.com>
 ;; Keywords: elscreen frames
-;; Version: 0.1.2
+;; Version: 0.1.3
 ;; Package-Requires: ((elscreen "1.4.6") (revive "2.19"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@
 
 ;;;###autoload
 (defun elscreen-persist-store ()
-  "Store the frame parameters, window configurations and elscreen."
+  "Store the screens, window configurations and frame parameters."
   (interactive)
   (let ((frame-parameters (frame-parameters))
         (current-screen (elscreen-get-current-screen))
@@ -75,7 +75,7 @@
 
 ;;;###autoload
 (defun elscreen-persist-restore ()
-  "Restore the frame parameters, window configurations and elscreen."
+  "Restore the screens, window configurations, and also the frame parameters if necessary."
   (interactive)
   (when (file-exists-p elscreen-persist-file)
     (let* ((config (read (with-temp-buffer (insert-file-contents elscreen-persist-file) (buffer-string))))
