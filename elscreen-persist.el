@@ -125,8 +125,9 @@
 (defun elscreen-persist-set-nicknames (data)
   "Set the nicknames."
   (dolist (screen (sort (elscreen-get-screen-list) '<))
-    (if-let ((nickname (nth screen data)))
-        (elscreen-set-screen-nickname screen nickname))))
+    (let ((nickname (nth screen data)))
+      (when nickname
+        (elscreen-set-screen-nickname screen nickname)))))
 
 ;;;###autoload
 (defun elscreen-persist-set-data (data)
