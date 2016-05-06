@@ -74,22 +74,31 @@
     screen-to-window-configuration-alist))
 
 ;;;###autoload
+(defun elscreen-persist-get-nicknames ()
+  "Determine the nicknames."
+  (let (screen-to-nickname-alist)
+    ;; Collect all the nicknames.
+    (dolist (screen (sort (elscreen-get-screen-list) '<))
+      (setq screen-to-nickname-alist
+            (append screen-to-nickname-alist
+                    (list (elscreen-get-screen-nickname screen)))))
+    screen-to-nickname-alist))
+
+;;;###autoload
 (defun elscreen-persist-get-data ()
-  "Determine the frame parameters and screens, window configurations."
-  (list (elscreen-persist-get-frame-params)
-        (elscreen-persist-get-screens)))
+  "Determine the frame parameters, screens, window configurations and nicknames."
+  (list (list 'frame-parameters (elscreen-persist-get-frame-params))
+        (list 'screen-to-window-configuration-alist (elscreen-persist-get-screens))
+        (list 'screen-to-nickname-alist (elscreen-persist-get-nicknames))))
 
 (defun elscreen-persist-store ()
-  "Store the screens, window configurations and frame parameters."
+  "Store the screens, window configurations, nicknames and frame parameters."
   (interactive)
-  (let ((frame-parameters (elscreen-persist-get-frame-params))
-        (screen-to-window-configuration-alist (elscreen-persist-get-screens)))
-    ;; Store the configurations.
-    (with-temp-file elscreen-persist-file
-      (let ((print-length nil)
-            (print-level nil))
-        (insert (prin1-to-string `((frame-parameters . ,frame-parameters)
-                                   (screen-to-window-configuration-alist . ,screen-to-window-configuration-alist))))))))
+  ;; Store the configurations.
+  (with-temp-file elscreen-persist-file
+    (let ((print-length nil)
+          (print-level nil))
+      (insert (prin1-to-string (elscreen-persist-get-data))))))
 
 ;;;###autoload
 (defun elscreen-persist-set-frame-params (data)
@@ -113,19 +122,26 @@
       (elscreen-kill screen))))
 
 ;;;###autoload
+(defun elscreen-persist-set-nicknames (data)
+  "Set the nicknames."
+  (dolist (screen (sort (elscreen-get-screen-list) '<))
+    (let ((nickname (nth screen data)))
+      (when nickname
+        (elscreen-set-screen-nickname screen nickname)))))
+
+;;;###autoload
 (defun elscreen-persist-set-data (data)
-  "Set the frame parameters and screens, window configurations."
-  (elscreen-persist-set-frame-params (car data))
-  (elscreen-persist-set-screens (car (cdr data))))
+  "Set the frame parameters, screens, window configurations and nicknames."
+  (elscreen-persist-set-frame-params (car (assoc-default 'frame-parameters data)))
+  (elscreen-persist-set-screens (car (assoc-default 'screen-to-window-configuration-alist data)))
+  (elscreen-persist-set-nicknames (car (assoc-default 'screen-to-nickname-alist data))))
 
 ;;;###autoload
 (defun elscreen-persist-restore ()
-  "Restore the screens, window configurations, and also the frame parameters if necessary."
+  "Restore the screens, window configurations, nicknames, and also the frame parameters if necessary."
   (interactive)
   (when (file-exists-p elscreen-persist-file)
-    (let ((config (read (with-temp-buffer (insert-file-contents elscreen-persist-file) (buffer-string)))))
-      (elscreen-persist-set-frame-params (assoc-default 'frame-parameters config))
-      (elscreen-persist-set-screens (assoc-default 'screen-to-window-configuration-alist config)))))
+    (elscreen-persist-set-data (read (with-temp-buffer (insert-file-contents elscreen-persist-file) (buffer-string))))))
 
 ;;;###autoload
 (define-minor-mode elscreen-persist-mode
