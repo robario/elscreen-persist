@@ -3,7 +3,7 @@
 
 ;; Author: Hironori Yoshida <webmaster@robario.com>
 ;; Keywords: elscreen frames
-;; Version: 0.2.0
+;; Version: 0.3.0
 ;; Package-Requires: ((elscreen "1.4.6") (revive "2.19"))
 
 ;; This program is free software; you can redistribute it and/or modify
